@@ -30,6 +30,7 @@
     "fastify": "^5.0.0",
     "fastify-jwt": "^4.2.0",
     "fastify-plugin": "^5.0.1",
+    "nanoid": "^5.0.7",
     "zod": "^3.23.8"
   }
 }
