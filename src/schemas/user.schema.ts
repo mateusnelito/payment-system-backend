@@ -13,7 +13,7 @@ const userSchema = z.object({
     .min(2)
     .max(100)
     .regex(fullNameRegex, 'invalid full name'),
-  BI: z.string().trim().regex(BIRegex, 'Invalid BI number'),
+  bi: z.string().trim().regex(BIRegex, 'Invalid BI number'),
   email: z.string().trim().email(),
   password: z
     .string()

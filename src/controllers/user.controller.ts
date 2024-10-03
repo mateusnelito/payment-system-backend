@@ -15,12 +15,12 @@ export async function createUserController(
   const data = createUserSchema.parse(request.body);
   const {
     email,
-    BI,
+    bi,
     account: { accountTypeId },
   } = data;
 
   await Promise.all([
-    checkUserExistence(email, BI),
+    checkUserExistence(email, bi),
     checkAccountTypeExistence(accountTypeId),
   ]);
 

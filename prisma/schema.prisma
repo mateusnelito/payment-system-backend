@@ -10,7 +10,7 @@ datasource db {
 model User {
   id           String    @id
   fullName     String    @map("full_name")
-  BI           String    @unique @map("bi")
+  bi           String    @unique
   email        String    @unique
   passwordHash String    @map("password_hash")
   createdAt    DateTime  @default(now()) @map("created_at")

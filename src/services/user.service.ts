@@ -6,10 +6,10 @@ import ClientError from '../utils/client-error.util';
 import HttpStatusCodes from '../utils/http-status-codes.util';
 import { generateNanoId } from '../utils/nanoid.util';
 
-export async function checkUserExistence(email: string, BI: string) {
+export async function checkUserExistence(email: string, bi: string) {
   const user = await prisma.user.findFirst({
-    where: { OR: [{ email }, { BI }] },
-    select: { email: true, BI: true },
+    where: { OR: [{ email }, { bi }] },
+    select: { email: true, bi: true },
   });
 
   if (user?.email === email)
@@ -17,16 +17,16 @@ export async function checkUserExistence(email: string, BI: string) {
       email: ['already in use'],
     });
 
-  if (user?.BI === BI)
-    throw new ClientError('invalid BI', HttpStatusCodes.CONFLICT, {
-      BI: ['already in use'],
+  if (user?.bi === bi)
+    throw new ClientError('invalid bi', HttpStatusCodes.CONFLICT, {
+      bi: ['already in use'],
     });
 }
 
 export async function createUser(data: createUserDataType) {
   const {
     fullName,
-    BI,
+    bi,
     email,
     password,
     account: { accountTypeId, initialBalance },
@@ -42,7 +42,7 @@ export async function createUser(data: createUserDataType) {
     data: {
       id: userId,
       fullName,
-      BI,
+      bi,
       email,
       passwordHash,
       Account: {
@@ -73,7 +73,7 @@ export async function createUser(data: createUserDataType) {
   return {
     id: user.id,
     fullName: user.fullName,
-    BI: user.BI,
+    bi: user.bi,
     email: user.email,
     account: {
       id: user.Account[0].id,
@@ -93,7 +93,7 @@ export async function getUser(id: string) {
     select: {
       id: true,
       fullName: true,
-      BI: true,
+      bi: true,
       email: true,
       createdAt: true,
       updatedAt: true,
@@ -112,7 +112,7 @@ export async function getUser(id: string) {
   return {
     id: user!.id,
     fullName: user!.fullName,
-    BI: user!.BI,
+    bi: user!.bi,
     email: user!.email,
     createdAt: user!.createdAt,
     updatedAt: user!.updatedAt,
