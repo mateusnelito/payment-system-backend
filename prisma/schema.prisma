@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id
-  fullName     String   @map("full_name")
-  BI           String   @unique @map("bi")
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  userType     UserType @relation(fields: [userTypeId], references: [id], onDelete: Cascade)
-  userTypeId   Int      @map("user_type_id")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id           String    @id
+  fullName     String    @map("full_name")
+  BI           String    @unique @map("bi")
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  userType     UserType  @relation(fields: [userTypeId], references: [id], onDelete: Cascade)
+  userTypeId   Int       @map("user_type_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  Account      Account[]
 
   @@map("users")
 }
@@ -27,4 +28,13 @@ model UserType {
   User User[]
 
   @@map("user_types")
+}
+
+model Account {
+  id      Int    @id @default(autoincrement())
+  User    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String @map("user_id")
+  balance Float  @default(0.0)
+
+  @@map("accounts")
 }
