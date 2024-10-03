@@ -6,7 +6,7 @@ import {
 } from '../utils/regex.util';
 
 const userSchema = z.object({
-  id: z.string(),
+  id: z.string().trim(),
   fullName: z
     .string()
     .trim()
@@ -34,6 +34,10 @@ export const createUserSchema = userSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+});
+
+export const getUserSchema = z.object({
+  userId: z.string().trim(),
 });
 
 export type createUserDataType = z.infer<typeof createUserSchema>;
