@@ -29,13 +29,14 @@ model AccountType {
 }
 
 model Account {
-  id                   String        @id
-  userId               String        @map("user_id")
+  id            String   @id
+  userId        String   @map("user_id")
+  accountTypeId Int      @map("account_type_id")
+  balance       Decimal  @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+
   User                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accountTypeId        Int           @map("account_type_id")
   AccountType          AccountType   @relation(fields: [accountTypeId], references: [id], onDelete: Cascade)
-  balance              Decimal       @default(0)
-  createdAt            DateTime      @default(now()) @map("created_at")
   sentTransactions     Transaction[] @relation("FromAccount")
   receivedTransactions Transaction[] @relation("ToAccount")
 
