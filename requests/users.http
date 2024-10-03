@@ -12,3 +12,6 @@ Content-Type: application/json
     "initialBalance": 100.50
   }
 }
+
+### Show a User
+GET http://localhost:3000/api/users/K4pqDozNWHa4Wa5XSbl2G
