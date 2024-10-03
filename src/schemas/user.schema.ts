@@ -24,7 +24,7 @@ const userSchema = z.object({
     ),
   account: z.object({
     accountTypeId: z.number().int().positive(),
-    balance: z.number().optional().default(0),
+    initialBalance: z.number().optional(),
   }),
   createdAt: z.date(),
   updatedAt: z.date(),
