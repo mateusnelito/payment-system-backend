@@ -6,3 +6,25 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String   @id
+  fullName     String   @map("full_name")
+  BI           String   @unique @map("bi")
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  userType     UserType @relation(fields: [userTypeId], references: [id], onDelete: Cascade)
+  userTypeId   Int      @map("user_type_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model UserType {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User[]
+
+  @@map("user_types")
+}
