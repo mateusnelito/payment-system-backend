@@ -23,7 +23,7 @@ model User {
 
 model UserType {
   id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
   User User[]
 
   @@map("user_types")
