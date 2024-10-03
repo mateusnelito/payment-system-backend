@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import HttpStatusCodes from '../utils/http-status-codes.util';
+import userRoute from './user.route';
 
 const routes: FastifyPluginAsync = async (server: FastifyInstance) => {
   // Define the 404 route
@@ -11,6 +12,7 @@ const routes: FastifyPluginAsync = async (server: FastifyInstance) => {
   });
 
   // API Routes
+  server.register(userRoute, { prefix: '/api/users' });
 };
 
 export default routes;
