@@ -22,7 +22,10 @@ const userSchema = z.object({
       strongPasswordRegex,
       'password must be strong and between 6 and 255 characters long'
     ),
-  userTypeId: z.number().int().positive(),
+  account: z.object({
+    accountTypeId: z.number().int().positive(),
+    balance: z.number().optional().default(0),
+  }),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
