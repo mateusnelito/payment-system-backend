@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createUserSchema, getUserSchema } from '../schemas/user.schema';
+import { createUserSchema, getUserParamsSchema } from '../schemas/user.schema';
 import { checkAccountTypeExistence } from '../services/account.service';
 import {
   checkUserExistence,
@@ -31,7 +31,7 @@ export async function getUserController(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const data = getUserSchema.parse(request.params);
+  const data = getUserParamsSchema.parse(request.params);
   const { userId } = data;
 
   return reply.send(await getUser(userId));

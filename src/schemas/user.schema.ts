@@ -4,6 +4,7 @@ import {
   fullNameRegex,
   strongPasswordRegex,
 } from '../utils/regex.util';
+import { accountSchema } from './account.schema';
 
 const userSchema = z.object({
   id: z.string().trim(),
@@ -22,9 +23,10 @@ const userSchema = z.object({
       strongPasswordRegex,
       'password must be strong and between 6 and 255 characters long'
     ),
-  account: z.object({
-    accountTypeId: z.number().int().positive(),
-    initialBalance: z.number().optional(),
+  account: accountSchema.omit({
+    id: true,
+    userId: true,
+    createdAt: true,
   }),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -36,7 +38,7 @@ export const createUserSchema = userSchema.omit({
   updatedAt: true,
 });
 
-export const getUserSchema = z.object({
+export const getUserParamsSchema = z.object({
   userId: z.string().trim(),
 });
 
