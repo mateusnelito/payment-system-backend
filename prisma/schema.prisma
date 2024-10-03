@@ -13,8 +13,6 @@ model User {
   BI           String    @unique @map("bi")
   email        String    @unique
   passwordHash String    @map("password_hash")
-  userType     UserType  @relation(fields: [userTypeId], references: [id], onDelete: Cascade)
-  userTypeId   Int       @map("user_type_id")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   Account      Account[]
@@ -22,19 +20,37 @@ model User {
   @@map("users")
 }
 
-model UserType {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  User User[]
+model AccountType {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  Account Account[]
 
-  @@map("user_types")
+  @@map("account_types")
 }
 
 model Account {
-  id      Int    @id @default(autoincrement())
-  User    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String @map("user_id")
-  balance Float  @default(0.0)
+  id                   String        @id
+  userId               String        @map("user_id")
+  User                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountTypeId        Int           @map("account_type_id")
+  AccountType          AccountType   @relation(fields: [accountTypeId], references: [id], onDelete: Cascade)
+  balance              Decimal       @default(0)
+  createdAt            DateTime      @default(now()) @map("created_at")
+  sentTransactions     Transaction[] @relation("FromAccount")
+  receivedTransactions Transaction[] @relation("ToAccount")
 
   @@map("accounts")
+}
+
+model Transaction {
+  id            Int      @id @default(autoincrement())
+  fromAccountId String   @map("from_account_id")
+  toAccountId   String   @map("to_account_id")
+  amount        Decimal
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  FromAccount Account @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: Cascade)
+  ToAccount   Account @relation("ToAccount", fields: [toAccountId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
 }
