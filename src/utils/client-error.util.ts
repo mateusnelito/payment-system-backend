@@ -6,9 +6,9 @@ interface errors {
 
 export default class ClientError extends Error {
   public readonly statusCode: number;
-  public readonly errors: errors;
+  public readonly errors?: errors;
 
-  constructor(message: string, errors: errors, statusCode?: number) {
+  constructor(message: string, statusCode?: number, errors?: errors) {
     super(message);
     this.name = 'ClientError';
     this.errors = errors;

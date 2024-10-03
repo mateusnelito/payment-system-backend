@@ -9,13 +9,9 @@ export async function checkAccountTypeExistence(id: number) {
   });
 
   if (!accountType)
-    throw new ClientError(
-      'invalid accountTypeId',
-      {
-        account: {
-          accountTypeId: ["don't exists"],
-        },
+    throw new ClientError('invalid accountTypeId', HttpStatusCodes.NOT_FOUND, {
+      account: {
+        accountTypeId: ["don't exists"],
       },
-      HttpStatusCodes.NOT_FOUND
-    );
+    });
 }

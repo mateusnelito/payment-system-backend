@@ -12,22 +12,14 @@ export async function checkUserExistence(email: string, BI: string) {
   });
 
   if (user?.email === email)
-    throw new ClientError(
-      'invalid email',
-      {
-        email: ['already in use'],
-      },
-      HttpStatusCodes.CONFLICT
-    );
+    throw new ClientError('invalid email', HttpStatusCodes.CONFLICT, {
+      email: ['already in use'],
+    });
 
   if (user?.BI === BI)
-    throw new ClientError(
-      'invalid BI',
-      {
-        BI: ['already in use'],
-      },
-      HttpStatusCodes.CONFLICT
-    );
+    throw new ClientError('invalid BI', HttpStatusCodes.CONFLICT, {
+      BI: ['already in use'],
+    });
 }
 
 export async function createUser(data: createUserDataType) {
