@@ -8,12 +8,12 @@ export async function checkUserExistence(email: string, BI: string) {
   });
 
   if (user) {
-    if (user.email)
+    if (user.email === email)
       throw new ClientError('invalid email', {
         email: ['email already in use'],
       });
 
-    if (user.BI)
+    if (user.BI === BI)
       throw new ClientError('invalid BI', {
         BI: ['BI already in use'],
       });
