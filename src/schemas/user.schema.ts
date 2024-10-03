@@ -42,4 +42,10 @@ export const getUserParamsSchema = z.object({
   userId: z.string().trim(),
 });
 
+export const createUserAccountSchema = accountSchema.omit({
+  id: true,
+  userId: true,
+  createdAt: true,
+});
+
 export type createUserDataType = z.infer<typeof createUserSchema>;
