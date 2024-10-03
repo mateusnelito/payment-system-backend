@@ -1,3 +1,4 @@
+import { create } from 'domain';
 import { prisma } from '../lib/prisma.lib';
 import { createUserDataType } from '../schemas/user.schema';
 import { hashPassword } from '../utils/bcrypt.util';
@@ -83,5 +84,38 @@ export async function createUser(data: createUserDataType) {
       },
     },
     createdAt: user.createdAt,
+  };
+}
+
+export async function getUser(id: string) {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      fullName: true,
+      BI: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+      _count: {
+        select: {
+          Account: {},
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new ClientError("user don't exist", HttpStatusCodes.NOT_FOUND);
+  }
+
+  return {
+    id: user!.id,
+    fullName: user!.fullName,
+    BI: user!.BI,
+    email: user!.email,
+    createdAt: user!.createdAt,
+    updatedAt: user!.updatedAt,
+    accounts: user!._count.Account,
   };
 }
