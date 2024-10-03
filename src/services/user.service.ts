@@ -10,12 +10,24 @@ export async function checkUserExistence(email: string, BI: string) {
   if (user) {
     if (user.email === email)
       throw new ClientError('invalid email', {
-        email: ['email already in use'],
+        email: ['already in use'],
       });
 
     if (user.BI === BI)
       throw new ClientError('invalid BI', {
-        BI: ['BI already in use'],
+        BI: ['already in use'],
       });
   }
+}
+
+export async function checkUserTypeExistence(id: number) {
+  const userType = await prisma.userType.findUnique({
+    where: { id },
+    select: { id: true },
+  });
+
+  if (!userType)
+    throw new ClientError('invalid userTypeId', {
+      userTypeId: ["don't exists"],
+    });
 }
