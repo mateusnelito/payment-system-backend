@@ -3,9 +3,12 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "fullName": "Nome",
-  "BI": "000000000LA001",
+  "fullName": "Nome Completo",
+  "bi": "000000000LA001",
   "email": "email@example.com",
-  "password": "StrongPassword-1234",
-  "userTypeId": 1
+  "password": "Password@1234",
+  "account": {
+    "accountTypeId": 2,
+    "initialBalance": 100.50
+  }
 }
