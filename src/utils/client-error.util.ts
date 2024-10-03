@@ -1,7 +1,7 @@
 import HttpStatusCodes from './http-status-codes.util';
 
 interface errors {
-  [key: string]: string[];
+  [key: string]: string[] | Record<string, string[]>;
 }
 
 export default class ClientError extends Error {
