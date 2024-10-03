@@ -22,6 +22,7 @@ const userSchema = z.object({
       strongPasswordRegex,
       'password must be strong and between 6 and 255 characters long'
     ),
+  userTypeId: z.number().int().positive(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -31,3 +32,5 @@ export const createUserSchema = userSchema.omit({
   createdAt: true,
   updatedAt: true,
 });
+
+export type createUserDataType = z.infer<typeof createUserSchema>;
