@@ -1,7 +1,7 @@
 {
   "name": "payment-system-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts",
     "start": "tsx --env-file .env src/server.ts",
@@ -28,7 +28,6 @@
     "@fastify/swagger-ui": "^5.0.1",
     "@prisma/client": "^5.20.0",
     "bcrypt": "^5.1.1",
-    "bcryptjs": "^2.4.3",
     "fastify": "^5.0.0",
     "fastify-jwt": "^4.2.0",
     "fastify-plugin": "^5.0.1",
