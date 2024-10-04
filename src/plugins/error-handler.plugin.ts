@@ -10,22 +10,31 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
     // Validation errors
     if (err instanceof ZodError) {
       return reply.status(HttpStatusCodes.BAD_REQUEST).send({
-        message: 'Input validation error',
-        errors: formatZodErrors(err),
+        status: 'fail',
+        data: {
+          message: 'Input validation error',
+          errors: formatZodErrors(err),
+          code: HttpStatusCodes.BAD_REQUEST,
+        },
       });
     }
 
     // Client Errors
     if (err instanceof ClientError) {
-      const { statusCode, message, errors } = err;
-      return reply.status(statusCode).send({ message, errors });
+      const { statusCode: code, message, errors } = err;
+      return reply
+        .status(code)
+        .send({ status: 'fail', data: { message, errors, code } });
     }
 
     console.error(err);
 
     return reply.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send({
-      statusCode: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      message: 'Internal server error!',
+      status: 'fail',
+      data: {
+        message: 'Internal server error!',
+        code: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      },
     });
   });
 });

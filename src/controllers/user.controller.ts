@@ -16,7 +16,9 @@ export async function createUserController(
 
   await checkUserExistence(email, bi);
 
-  return reply.status(HttpStatusCodes.CREATED).send(await createUser(data));
+  return reply
+    .status(HttpStatusCodes.CREATED)
+    .send({ status: 'success', data: await createUser(data) });
 }
 
 export async function getUserController(
