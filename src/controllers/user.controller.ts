@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createUserSchema, getUserParamsSchema } from '../schemas/user.schema';
-import { checkAccountTypeExistence } from '../services/account.service';
 import {
   checkUserExistence,
   createUser,
@@ -13,16 +12,9 @@ export async function createUserController(
   reply: FastifyReply
 ) {
   const data = createUserSchema.parse(request.body);
-  const {
-    email,
-    bi,
-    account: { accountTypeId },
-  } = data;
+  const { email, bi } = data;
 
-  await Promise.all([
-    checkUserExistence(email, bi),
-    checkAccountTypeExistence(accountTypeId),
-  ]);
+  await checkUserExistence(email, bi);
 
   return reply.status(HttpStatusCodes.CREATED).send(await createUser(data));
 }
