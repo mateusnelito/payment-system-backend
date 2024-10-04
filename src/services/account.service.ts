@@ -52,3 +52,36 @@ export async function createAccount(
     createdAt: account.createdAt,
   };
 }
+
+export async function getAccount(id: string) {
+  const account = await prisma.account.findUnique({
+    where: { id },
+    include: {
+      AccountType: {
+        select: {
+          name: true,
+        },
+      },
+      User: {
+        select: {
+          id: true,
+          fullName: true,
+        },
+      },
+    },
+  });
+
+  if (!account)
+    throw new ClientError("account don't exist", HttpStatusCodes.NOT_FOUND);
+
+  return {
+    id: account.id,
+    type: account.AccountType.name,
+    balance: account.balance,
+    createdAt: account.createdAt,
+    owner: {
+      id: account.User.id,
+      fullName: account.User.fullName,
+    },
+  };
+}
