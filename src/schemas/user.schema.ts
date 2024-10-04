@@ -49,3 +49,4 @@ export const createUserAccountSchema = accountSchema.omit({
 });
 
 export type createUserDataType = z.infer<typeof createUserSchema>;
+export type createUserAccountDataType = z.infer<typeof createUserAccountSchema>;
