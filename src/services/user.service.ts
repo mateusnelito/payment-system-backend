@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import { prisma } from '../lib/prisma.lib';
 import { createUserDataType } from '../schemas/user.schema';
 import { hashPassword } from '../utils/bcrypt.util';
@@ -84,6 +83,7 @@ export async function createUser(data: createUserDataType) {
       },
     },
     createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 }
 
@@ -110,12 +110,12 @@ export async function getUser(id: string) {
   }
 
   return {
-    id: user!.id,
-    fullName: user!.fullName,
-    bi: user!.bi,
-    email: user!.email,
-    createdAt: user!.createdAt,
-    updatedAt: user!.updatedAt,
-    accounts: user!._count.Account,
+    id: user.id,
+    fullName: user.fullName,
+    bi: user.bi,
+    email: user.email,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    accounts: user._count.Account,
   };
 }
