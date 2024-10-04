@@ -9,3 +9,7 @@ export const accountSchema = z.object({
   initialBalance: z.number().optional(),
   createdAt: z.date(),
 });
+
+export const accountParamsSchema = z.object({
+  accountId: z.string().trim(),
+});
