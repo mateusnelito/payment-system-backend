@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { ResponseStatus } from '../constants/response-status.type';
 import { createTransactionSchema } from '../schemas/transaction.schema';
 import {
   createTransaction,
@@ -18,7 +19,7 @@ export async function createTransactionController(
   // TODO: Send a notification
 
   return reply.status(HttpStatusCodes.CREATED).send({
-    status: 'success',
+    status: ResponseStatus.SUCCESS,
     data: transaction,
   });
 }

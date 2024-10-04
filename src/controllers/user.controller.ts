@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { ResponseStatus } from '../constants/response-status.type';
 import {
   createUserAccountSchema,
   createUserSchema,
@@ -28,7 +29,7 @@ export async function createUserController(
 
   return reply
     .status(HttpStatusCodes.CREATED)
-    .send({ status: 'success', data: await createUser(data) });
+    .send({ status: ResponseStatus.SUCCESS, data: await createUser(data) });
 }
 
 export async function getUserController(
@@ -38,7 +39,7 @@ export async function getUserController(
   const { userId } = getUserParamsSchema.parse(request.params);
 
   return reply.send({
-    status: 'success',
+    status: ResponseStatus.SUCCESS,
     data: await getUser(userId),
   });
 }
@@ -54,7 +55,7 @@ export async function createUserAccountController(
   await checkUserAccountTypeExistence(userId, data.type);
 
   return reply.status(HttpStatusCodes.CREATED).send({
-    status: 'success',
+    status: ResponseStatus.SUCCESS,
     data: await createAccount(userId, data),
   });
 }
@@ -68,7 +69,7 @@ export async function getUserAccountsController(
   await checkUserId(userId);
 
   return reply.send({
-    status: 'success',
+    status: ResponseStatus.SUCCESS,
     data: await getUserAccounts(userId),
   });
 }

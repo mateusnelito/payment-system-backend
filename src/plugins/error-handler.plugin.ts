@@ -1,9 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import HttpStatusCodes from '../utils/http-status-codes.util';
 import { ZodError } from 'zod';
-import formatZodErrors from '../utils/format-zod-errors.util';
+import { ResponseStatus } from '../constants/response-status.type';
 import ClientError from '../utils/client-error.util';
+import formatZodErrors from '../utils/format-zod-errors.util';
+import HttpStatusCodes from '../utils/http-status-codes.util';
 
 export default fastifyPlugin(async (server: FastifyInstance) => {
   server.setErrorHandler((err, _, reply) => {
@@ -12,7 +13,7 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
     // Validation errors
     if (err instanceof ZodError) {
       return reply.status(HttpStatusCodes.BAD_REQUEST).send({
-        status: 'fail',
+        status: ResponseStatus.FAIL,
         data: {
           message: 'Input validation error',
           errors: formatZodErrors(err),
@@ -26,13 +27,13 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
       const { statusCode: code, message, errors } = err;
       return reply
         .status(code)
-        .send({ status: 'fail', data: { message, errors, code } });
+        .send({ status: ResponseStatus.FAIL, data: { message, errors, code } });
     }
 
     console.error(err);
 
     return reply.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send({
-      status: 'fail',
+      status: ResponseStatus.FAIL,
       data: {
         message: 'Internal server error!',
         code: HttpStatusCodes.INTERNAL_SERVER_ERROR,
