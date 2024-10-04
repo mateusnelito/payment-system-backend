@@ -7,6 +7,8 @@ import ClientError from '../utils/client-error.util';
 
 export default fastifyPlugin(async (server: FastifyInstance) => {
   server.setErrorHandler((err, _, reply) => {
+    // TODO: Implement logging for all errors
+
     // Validation errors
     if (err instanceof ZodError) {
       return reply.status(HttpStatusCodes.BAD_REQUEST).send({
