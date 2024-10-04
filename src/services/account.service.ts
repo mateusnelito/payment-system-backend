@@ -105,3 +105,14 @@ export async function getUserAccounts(userId: string) {
     createdAt: account.createdAt,
   }));
 }
+
+export async function accountExists(id: string) {
+  return await prisma.account.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      accountTypeId: true,
+      balance: true,
+    },
+  });
+}
