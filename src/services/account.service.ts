@@ -85,3 +85,23 @@ export async function getAccount(id: string) {
     },
   };
 }
+
+export async function getUserAccounts(userId: string) {
+  const accounts = await prisma.account.findMany({
+    where: { userId },
+    include: {
+      AccountType: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return accounts.map((account) => ({
+    id: account.id,
+    type: account.AccountType.name,
+    balance: account.balance,
+    createdAt: account.createdAt,
+  }));
+}
