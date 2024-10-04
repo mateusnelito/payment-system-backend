@@ -1,4 +1,4 @@
 export enum AccountType {
-  SHOPKEEPER = 1,
+  MERCHANT = 1,
   COMMON = 2,
 }

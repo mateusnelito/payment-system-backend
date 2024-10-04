@@ -3,7 +3,7 @@ import { prisma } from '../../src/lib/prisma.lib';
 async function seed() {
   // Generate default account types
   await prisma.accountType.createMany({
-    data: [{ name: 'SHOPKEEPER' }, { name: 'COMMON' }],
+    data: [{ name: 'MERCHANT' }, { name: 'COMMON' }],
   });
 }
 
