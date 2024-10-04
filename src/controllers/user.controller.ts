@@ -34,8 +34,7 @@ export async function getUserController(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const data = getUserParamsSchema.parse(request.params);
-  const { userId } = data;
+  const { userId } = getUserParamsSchema.parse(request.params);
 
   return reply.send({
     status: 'success',
