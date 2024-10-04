@@ -3,6 +3,7 @@ import { createTransactionDataType } from '../schemas/transaction.schema';
 import ClientError from '../utils/client-error.util';
 import HttpStatusCodes from '../utils/http-status-codes.util';
 import { accountExists } from './account.service';
+import { authorizeTransaction } from './transaction-authorization.service';
 
 export async function validateTransaction(data: createTransactionDataType) {
   const { fromAccountId, toAccountId, amount } = data;
@@ -52,5 +53,12 @@ export async function validateTransaction(data: createTransactionDataType) {
           'The source account does not have enough balance to complete this transaction.',
         ],
       }
+    );
+
+  // Checks if the transaction is authorized
+  if (!(await authorizeTransaction()))
+    throw new ClientError(
+      'Transaction not authorized.',
+      HttpStatusCodes.FORBIDDEN
     );
 }
