@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import HttpStatusCodes from '../utils/http-status-codes.util';
+import accountRoute from './account.route';
 import userRoute from './user.route';
 
 const routes: FastifyPluginAsync = async (server: FastifyInstance) => {
@@ -13,6 +14,7 @@ const routes: FastifyPluginAsync = async (server: FastifyInstance) => {
 
   // API Routes
   server.register(userRoute, { prefix: '/api/users' });
+  server.register(accountRoute, { prefix: '/api/accounts' });
 };
 
 export default routes;
