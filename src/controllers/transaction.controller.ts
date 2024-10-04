@@ -6,6 +6,7 @@ import {
   validateTransaction,
 } from '../services/transaction.service';
 import HttpStatusCodes from '../utils/http-status-codes.util';
+import { sendNotification } from '../services/notification.service';
 
 export async function createTransactionController(
   request: FastifyRequest,
@@ -16,10 +17,10 @@ export async function createTransactionController(
   const validatedTransaction = await validateTransaction(data);
   const transaction = await createTransaction(validatedTransaction);
 
-  // TODO: Send a notification
-
-  return reply.status(HttpStatusCodes.CREATED).send({
+  reply.status(HttpStatusCodes.CREATED).send({
     status: ResponseStatus.SUCCESS,
     data: transaction,
   });
+
+  await sendNotification();
 }
