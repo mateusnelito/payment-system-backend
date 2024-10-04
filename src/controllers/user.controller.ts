@@ -7,6 +7,7 @@ import {
 import {
   checkUserAccountTypeExistence,
   createAccount,
+  getUserAccounts,
 } from '../services/account.service';
 import {
   checkUserExistence,
@@ -55,5 +56,19 @@ export async function createUserAccountController(
   return reply.status(HttpStatusCodes.CREATED).send({
     status: 'success',
     data: await createAccount(userId, data),
+  });
+}
+
+export async function getUserAccountsController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { userId } = getUserParamsSchema.parse(request.params);
+
+  await checkUserId(userId);
+
+  return reply.send({
+    status: 'success',
+    data: await getUserAccounts(userId),
   });
 }
