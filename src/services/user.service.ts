@@ -115,3 +115,13 @@ export async function getUser(id: string) {
     accounts: user._count.Account,
   };
 }
+
+export async function checkUserId(id: string) {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { id: true },
+  });
+
+  if (!user)
+    throw new ClientError("user don't exist", HttpStatusCodes.NOT_FOUND);
+}
