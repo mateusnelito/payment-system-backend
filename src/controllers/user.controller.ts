@@ -1,7 +1,16 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createUserSchema, getUserParamsSchema } from '../schemas/user.schema';
+import {
+  createUserAccountSchema,
+  createUserSchema,
+  getUserParamsSchema,
+} from '../schemas/user.schema';
+import {
+  checkUserAccountTypeExistence,
+  createAccount,
+} from '../services/account.service';
 import {
   checkUserExistence,
+  checkUserId,
   createUser,
   getUser,
 } from '../services/user.service';
@@ -28,5 +37,24 @@ export async function getUserController(
   const data = getUserParamsSchema.parse(request.params);
   const { userId } = data;
 
-  return reply.send(await getUser(userId));
+  return reply.send({
+    status: 'success',
+    data: await getUser(userId),
+  });
+}
+
+export async function createUserAccountController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { userId } = getUserParamsSchema.parse(request.params);
+  const data = createUserAccountSchema.parse(request.body);
+
+  await checkUserId(userId);
+  await checkUserAccountTypeExistence(userId, data.type);
+
+  return reply.status(HttpStatusCodes.CREATED).send({
+    status: 'success',
+    data: await createAccount(userId, data),
+  });
 }
