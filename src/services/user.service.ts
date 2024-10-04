@@ -1,3 +1,4 @@
+import { AccountType } from '../constants/account.type';
 import { prisma } from '../lib/prisma.lib';
 import { createUserDataType } from '../schemas/user.schema';
 import { hashPassword } from '../utils/bcrypt.util';
@@ -28,7 +29,7 @@ export async function createUser(data: createUserDataType) {
     bi,
     email,
     password,
-    account: { accountTypeId, initialBalance },
+    account: { type: accountType, initialBalance },
   } = data;
 
   const [userId, passwordHash, accountId] = await Promise.all([
@@ -47,7 +48,7 @@ export async function createUser(data: createUserDataType) {
       Account: {
         create: {
           id: accountId,
-          accountTypeId,
+          accountTypeId: AccountType[accountType],
           balance: initialBalance,
         },
       },
@@ -60,7 +61,6 @@ export async function createUser(data: createUserDataType) {
           createdAt: true,
           AccountType: {
             select: {
-              id: true,
               name: true,
             },
           },
@@ -76,11 +76,8 @@ export async function createUser(data: createUserDataType) {
     email: user.email,
     account: {
       id: user.Account[0].id,
+      type: user.Account[0].AccountType.name,
       balance: user.Account[0].balance,
-      accountType: {
-        id: user.Account[0].AccountType.id,
-        name: user.Account[0].AccountType.name,
-      },
     },
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
@@ -105,9 +102,8 @@ export async function getUser(id: string) {
     },
   });
 
-  if (!user) {
+  if (!user)
     throw new ClientError("user don't exist", HttpStatusCodes.NOT_FOUND);
-  }
 
   return {
     id: user.id,
