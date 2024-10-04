@@ -15,3 +15,12 @@ Content-Type: application/json
 
 ### Show a User
 GET http://localhost:3000/api/users/K4pqDozNWHa4Wa5XSbl2G
+
+### Store Account to User
+POST http://localhost:3000/api/users/zMsapWIs9lSZciv3Txff7/accounts
+Content-Type: application/json
+
+{
+  "type": "COMMON",
+  "initialBalance": 100
+}
