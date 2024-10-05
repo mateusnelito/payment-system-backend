@@ -7,3 +7,6 @@ Content-Type: application/json
   "toAccountId": "RCwzLj8nApjWVBTvmFhFO",
   "amount": 50
 }
+
+### Show Transaction
+GET http://localhost:3000/api/transactions/1
