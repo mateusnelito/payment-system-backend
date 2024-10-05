@@ -1,12 +1,16 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ResponseStatus } from '../constants/response-status.type';
-import { createTransactionSchema } from '../schemas/transaction.schema';
+import {
+  createTransactionSchema,
+  getTransactionParamsSchema,
+} from '../schemas/transaction.schema';
+import { sendNotification } from '../services/notification.service';
 import {
   createTransaction,
+  getTransaction,
   validateTransaction,
 } from '../services/transaction.service';
 import HttpStatusCodes from '../utils/http-status-codes.util';
-import { sendNotification } from '../services/notification.service';
 
 export async function createTransactionController(
   request: FastifyRequest,
@@ -23,4 +27,16 @@ export async function createTransactionController(
   });
 
   await sendNotification();
+}
+
+export async function getTransactionController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { transactionId } = getTransactionParamsSchema.parse(request.params);
+
+  return reply.send({
+    status: ResponseStatus.SUCCESS,
+    data: await getTransaction(transactionId),
+  });
 }
