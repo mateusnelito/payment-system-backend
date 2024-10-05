@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import { AccountType } from '../constants/account.type';
 import { prisma } from '../lib/prisma.lib';
 import { createTransactionDataType } from '../schemas/transaction.schema';
@@ -46,7 +45,7 @@ export async function validateTransaction(data: createTransactionDataType) {
     );
 
   // Checks if the source account has sufficient balance to complete the transaction
-  if (fromAccount.balance.cmp(amount) < 0)
+  if (fromAccount.balance < amount)
     throw new ClientError(
       'Insufficient funds for transaction',
       HttpStatusCodes.FORBIDDEN,
@@ -80,11 +79,11 @@ export async function validateTransaction(data: createTransactionDataType) {
 interface createTransactionDataInterface {
   fromAccount: {
     id: string;
-    balance: Prisma.Decimal;
+    balance: number;
   };
   toAccount: {
     id: string;
-    balance: Prisma.Decimal;
+    balance: number;
   };
   amount: number;
 }
@@ -95,12 +94,12 @@ export async function createTransaction(data: createTransactionDataInterface) {
   return await prisma.$transaction(async (transaction) => {
     await transaction.account.update({
       where: { id: fromAccount.id },
-      data: { balance: fromAccount.balance.sub(amount) },
+      data: { balance: fromAccount.balance - amount },
     });
 
     await transaction.account.update({
       where: { id: toAccount.id },
-      data: { balance: toAccount.balance.plus(amount) },
+      data: { balance: toAccount.balance + amount },
     });
 
     const newTransaction = await transaction.transaction.create({

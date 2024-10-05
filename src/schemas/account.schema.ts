@@ -7,7 +7,7 @@ export const accountSchema = z.object({
   type: z.enum(['MERCHANT', 'COMMON'], {
     message: 'must be MERCHANT or COMMON',
   }),
-  initialBalance: z.number().optional(),
+  initialBalance: z.number().int().optional(),
   createdAt: z.date(),
 });
 

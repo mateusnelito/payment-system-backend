@@ -4,7 +4,7 @@ const transactionSchema = z.object({
   id: z.number().int().positive(),
   fromAccountId: z.string().trim(),
   toAccountId: z.string().trim(),
-  amount: z.number().positive(),
+  amount: z.number().int().positive(),
   createdAt: z.date(),
 });
 
