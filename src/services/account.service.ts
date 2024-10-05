@@ -116,3 +116,13 @@ export async function accountExists(id: string) {
     },
   });
 }
+
+export async function checkAccountId(id: string) {
+  const account = await prisma.account.findUnique({
+    where: { id },
+    select: { id: true },
+  });
+
+  if (!account)
+    throw new ClientError("Account don't exist", HttpStatusCodes.NOT_FOUND);
+}
