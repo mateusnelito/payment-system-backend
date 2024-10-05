@@ -119,3 +119,12 @@ export async function createTransaction(data: createTransactionDataInterface) {
     };
   });
 }
+
+export async function getTransaction(id: number) {
+  const transaction = await prisma.transaction.findUnique({ where: { id } });
+
+  if (!transaction)
+    throw new ClientError("transaction don't exist", HttpStatusCodes.NOT_FOUND);
+
+  return transaction;
+}
