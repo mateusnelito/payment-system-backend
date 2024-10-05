@@ -1,0 +1,9 @@
+### Store Transacion
+POST http://localhost:3000/api/transactions
+Content-Type: application/json
+
+{
+  "fromAccountId": "5riz_l9tTcAeh0YaWuUJV",
+  "toAccountId": "RCwzLj8nApjWVBTvmFhFO",
+  "amount": 50
+}
