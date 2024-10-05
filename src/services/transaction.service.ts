@@ -128,3 +128,10 @@ export async function getTransaction(id: number) {
 
   return transaction;
 }
+
+export async function getAccountTransactions(accountId: string) {
+  return await prisma.transaction.findMany({
+    where: { OR: [{ fromAccountId: accountId }, { toAccountId: accountId }] },
+    orderBy: { createdAt: 'desc' },
+  });
+}
