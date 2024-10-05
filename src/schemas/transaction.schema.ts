@@ -13,4 +13,8 @@ export const createTransactionSchema = transactionSchema.omit({
   createdAt: true,
 });
 
+export const getTransactionParamsSchema = z.object({
+  transactionId: z.coerce.number().int().positive(),
+});
+
 export type createTransactionDataType = z.infer<typeof createTransactionSchema>;
