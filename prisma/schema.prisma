@@ -32,7 +32,7 @@ model Account {
   id            String   @id
   userId        String   @map("user_id")
   accountTypeId Int      @map("account_type_id")
-  balance       Decimal  @default(0)
+  balance       Int      @default(0)
   createdAt     DateTime @default(now()) @map("created_at")
 
   User                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -48,7 +48,7 @@ model Transaction {
   id            Int      @id @default(autoincrement())
   fromAccountId String   @map("from_account_id")
   toAccountId   String   @map("to_account_id")
-  amount        Decimal
+  amount        Int
   createdAt     DateTime @default(now()) @map("created_at")
 
   FromAccount Account @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: Cascade)
