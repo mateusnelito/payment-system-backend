@@ -8,8 +8,8 @@ Content-Type: application/json
   "email": "email@example.com",
   "password": "Password@1234",
   "account": {
-    "accountTypeId": 2,
-    "initialBalance": 100.50
+    "type": "COMMON",
+    "initialBalance": 100
   }
 }
 
@@ -24,3 +24,6 @@ Content-Type: application/json
   "type": "COMMON",
   "initialBalance": 100
 }
+
+### Show User Accounts
+GET http://localhost:3000/api/users/zMsapWIs9lSZciv3Txff7/accounts
