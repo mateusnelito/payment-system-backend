@@ -8,7 +8,8 @@
     "format": "prettier --write src/",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seeders/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset -f"
   },
   "keywords": [],
   "author": "",
