@@ -87,95 +87,26 @@ Follow the steps below to set up the project on your local machine:
 
 Once the installation steps are complete, the API will be running at the default URL `http://localhost:3000/api`, unless the port has been changed. You can then start making calls to the defined endpoints.
 
-## 3. Endpoints
+## 3. API Documentation
 
-The Payment System API provides the following endpoints for interacting with the data.
+- **Overview**: This project uses Swagger for API documentation. You can access the interactive documentation by visiting the [Swagger UI](http://localhost:3000/swagger).
 
-### 1. Users
+- **Main Endpoints**:
+    - **Users**
+        - `POST /users`: Create a new user.
+        - `GET /users/:userId`: Retrieve user information.
 
-- **Create user**: `POST /users`
+    - **Accounts**
+        - `GET /users/:userId/accounts`: Show user accounts.
+        - `POST /users/:userId/accounts`: Create an account for a user.
 
-  - **Request body**:
-    ```json
-    {
-      "fullName": "User Name",
-      "bi": "000000000LA000",
-      "email": "email@example.com",
-      "password": "Password@1234",
-      "account": {
-        "type": "COMMON",
-        "initialBalance": 10000
-      }
-    }
-    ```
-  - **Response**:
-    - **201 Created**: User created successfully.
-    - **400 Bad Request**: Invalid data (e.g., invalid bi).
-    - **409 Conflict**: Existing data (e.g., email already exists).
+    - **Transactions**
+        - `POST /transactions`: Create a new transaction.
+        - `GET /accounts/:accountId/transactions`: Show account transactions.
 
-- **View user**: `GET /users/:userId`
-  - **Parameters**:
-    - `userId` (string): ID of the user to view.
-  - **Response**:
-    - **200 OK**: Returns user information.
-    - **404 Not Found**: User not found.
+- **Testing Endpoints**:
 
-### 2. Accounts
-
-- **Create account**: `POST /users/:userId/accounts`
-
-  - **Request body**:
-    ```json
-    {
-      "type": "MERCHANT"
-    }
-    ```
-  - **Response**:
-    - **201 Created**: Account created successfully.
-    - **404 Not Found**: User not found.
-    - **409 Conflict**: User already has this type of account.
-
-- **View accounts**: `GET /users/:userId/accounts`
-
-  - **Parameters**:
-    - `userId` (string): ID of the user whose accounts will be viewed.
-  - **Response**:
-    - **200 OK**: Returns a list of user accounts.
-    - **404 Not Found**: User not found.
-
-- **View account**: `GET /accounts/:accountId`
-  - **Parameters**:
-    - `accountId` (string): ID of the account to view.
-  - **Response**:
-    - **200 OK**: Returns account information.
-    - **404 Not Found**: Account not found.
-
-### 3. Transactions
-
-Transactions can only be made between **COMMON** and **MERCHANT** accounts. Transactions from **MERCHANT** accounts to any other type are not allowed.
-
-- **Create transaction**: `POST /transactions`
-
-  - **Request body**:
-    ```json
-    {
-      "fromAccountId": "QqKUVZYgp6LNZDrAUEGuw",
-      "toAccountId": "FdRQxOLCEefpKxCVTeEKC",
-      "amount": 100
-    }
-    ```
-  - **Response**:
-    - **201 Created**: Transaction completed successfully.
-    - **400 Bad Request**: Invalid data (e.g., insufficient balance).
-    - **403 Forbidden**: Unauthorized transaction.
-    - **404 Not Found**: Source or destination account not found.
-
-- **View transactions**: `GET /accounts/:accountId/transactions`
-  - **Parameters**:
-    - `accountId` (string): ID of the account whose transactions will be viewed.
-  - **Response**:
-    - **200 OK**: Returns a list of account transactions.
-    - **404 Not Found**: Account not found.
+    - The `.http` files in the `request` folder contain HTTP documentation for all endpoints. These files can be used to test the endpoints directly in Visual Studio Code with the **REST Client** extension or in your preferred editor with a similar extension or plugin.
 
 ## 4. Database
 
@@ -221,53 +152,46 @@ const amountInCents = Math.round(amountInKwanza * 100); // Convert to cents
 console.log(`Amount to be sent: ${amountInCents} cents`); // Amount to be sent: 7525 cents
 ```
 
-##
-
-6.  Roadmap / Next Steps
+## 6.  Roadmap / Next Steps
 
 The project is constantly evolving, focusing on continuous learning and adding features to enhance the robustness and best practices in backend development. Below are the next planned steps for the payment system's development, organized to facilitate gradual learning:
 
-1. **Swagger Documentation**
-
-   - **Goal**: Automate and provide documentation for the API endpoints.
-   - **Step**: Implement **Swagger** integration to generate automatic API route documentation, allowing users to view requests and possible responses, as well as to test the endpoints directly via the graphical interface.
-
-2. **Include `status` and `transactionType` Fields**
-
-   - **Goal**: Categorize transactions and improve auditing.
-   - **Step**: Add `status` (for audit tracking) and `transactionType` (to indicate whether it’s a debit or credit transaction) fields to the transaction entity. This will help monitor the transaction state and provide insights into financial flow.
-
-3. **Authentication and Authorization**
+1. **Authentication and Authorization**
 
    - **Goal**: Include authentication to protect endpoints, ensuring only authenticated users can perform financial operations.
    - **Step**: Implement JWT (JSON Web Tokens) authentication to control access to API resources, and ensure only authorized transactions can occur between accounts.
 
-4. **Transaction Limits**
+2. **Transaction Limits**
 
    - **Goal**: Introduce rules to limit the number of daily transactions or the total amount allowed per account.
    - **Step**: Add validations to control the transaction limit per day and/or the maximum amount that can be transferred, based on the account type or specific business rules.
 
-5. **Queue Management and Retry**
+3. **Queue Management and Retry**
 
    - **Goal**: Improve the system’s resilience and performance.
    - **Step**: Implement a queue for transaction management, handling transaction failures and integrating retry mechanisms to ensure operations are processed reliably.
 
-6. **Logs and Monitoring**
+4. **Include `status` Field for Audit Tracking**
+
+    - **Goal**: Track the state of each transaction and improve auditing.
+    - **Step**: Add a `status` field to the transaction entity to monitor the current state of a transaction (e.g., pending, completed, failed). This will provide better insights into transaction progress and financial flow.
+
+5. **Logs and Monitoring**
 
    - **Goal**: Facilitate debugging and monitoring of the API in production.
    - **Step**: Add a solution for structured logs and integrate monitoring tools to track system performance and detect issues in real-time.
 
-7. **Automated Testing**
+6. **Automated Testing**
 
    - **Goal**: Ensure code quality and robustness through testing.
    - **Step**: Create an automated test suite with **Jest** or **Mocha**, covering the system’s main functionalities (unit tests, integration tests, etc.).
 
-8. **Support for Multiple Currencies**
+7. **Support for Multiple Currencies**
 
    - **Goal**: Make the system flexible to support transactions in different currencies.
    - **Step**: Adapt the account and transaction model to support multiple currencies and allow value conversion when needed.
 
-9. **Security Best Practices**
+8. **Security Best Practices**
 
    - **Goal**: Implement recommended security practices to ensure the system is secure against common attacks.
    - **Step**: Introduce additional security controls, such as password encryption, sensitive data validation, and protection against vulnerabilities like SQL injection and brute force attacks.
