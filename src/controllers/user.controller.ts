@@ -1,18 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ResponseStatus } from '../constants/response-status.type';
 import {
-  createUserAccountSchema,
   createUserDataType,
-  getUserParamsSchema,
+  getUserParamsDataType,
 } from '../schemas/user.schema';
 import {
-  checkUserAccountTypeExistence,
-  createAccount,
-  getUserAccounts,
-} from '../services/account.service';
-import {
   checkUserExistence,
-  checkUserId,
   createUser,
   getUser,
 } from '../services/user.service';
@@ -33,10 +26,10 @@ export async function createUserController(
 }
 
 export async function getUserController(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Params: getUserParamsDataType }>,
   reply: FastifyReply
 ) {
-  const { userId } = getUserParamsSchema.parse(request.params);
+  const { userId } = request.params;
 
   return reply.send({
     status: ResponseStatus.SUCCESS,
@@ -44,32 +37,32 @@ export async function getUserController(
   });
 }
 
-export async function createUserAccountController(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  const { userId } = getUserParamsSchema.parse(request.params);
-  const data = createUserAccountSchema.parse(request.body);
-
-  await checkUserId(userId);
-  await checkUserAccountTypeExistence(userId, data.type);
-
-  return reply.status(HttpStatusCodes.CREATED).send({
-    status: ResponseStatus.SUCCESS,
-    data: await createAccount(userId, data),
-  });
-}
-
-export async function getUserAccountsController(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  const { userId } = getUserParamsSchema.parse(request.params);
-
-  await checkUserId(userId);
-
-  return reply.send({
-    status: ResponseStatus.SUCCESS,
-    data: await getUserAccounts(userId),
-  });
-}
+// export async function createUserAccountController(
+//   request: FastifyRequest,
+//   reply: FastifyReply
+// ) {
+//   const { userId } = getUserParamsSchema.parse(request.params);
+//   const data = createUserAccountSchema.parse(request.body);
+//
+//   await checkUserId(userId);
+//   await checkUserAccountTypeExistence(userId, data.type);
+//
+//   return reply.status(HttpStatusCodes.CREATED).send({
+//     status: ResponseStatus.SUCCESS,
+//     data: await createAccount(userId, data),
+//   });
+// }
+//
+// export async function getUserAccountsController(
+//   request: FastifyRequest,
+//   reply: FastifyReply
+// ) {
+//   const { userId } = getUserParamsSchema.parse(request.params);
+//
+//   await checkUserId(userId);
+//
+//   return reply.send({
+//     status: ResponseStatus.SUCCESS,
+//     data: await getUserAccounts(userId),
+//   });
+// }
