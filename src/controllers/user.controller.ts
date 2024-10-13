@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { ResponseStatus } from '../constants/response-status.type';
 import {
   createUserAccountSchema,
-  createUserSchema,
+  createUserDataType,
   getUserParamsSchema,
 } from '../schemas/user.schema';
 import {
@@ -19,17 +19,17 @@ import {
 import HttpStatusCodes from '../utils/http-status-codes.util';
 
 export async function createUserController(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Body: createUserDataType }>,
   reply: FastifyReply
 ) {
-  const data = createUserSchema.parse(request.body);
-  const { email, bi } = data;
+  const { email, bi } = request.body;
 
   await checkUserExistence(email, bi);
 
-  return reply
-    .status(HttpStatusCodes.CREATED)
-    .send({ status: ResponseStatus.SUCCESS, data: await createUser(data) });
+  return reply.status(HttpStatusCodes.CREATED).send({
+    status: ResponseStatus.SUCCESS,
+    data: await createUser(request.body),
+  });
 }
 
 export async function getUserController(
