@@ -5,6 +5,7 @@ import {
   strongPasswordRegex,
 } from '../utils/regex.util';
 import { accountSchema } from './account.schema';
+import { clientErrorSchema } from './error.schema';
 
 const userSchema = z.object({
   id: z.string().trim(),
@@ -13,8 +14,8 @@ const userSchema = z.object({
     .trim()
     .min(2)
     .max(100)
-    .regex(fullNameRegex, 'invalid full name'),
-  bi: z.string().trim().regex(BIRegex, 'Invalid BI number'),
+    .regex(fullNameRegex, 'invalid'),
+  bi: z.string().trim().regex(BIRegex, 'Invalid'),
   email: z.string().trim().email(),
   password: z
     .string()
@@ -32,11 +33,33 @@ const userSchema = z.object({
   updatedAt: z.date(),
 });
 
-export const createUserSchema = userSchema.omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
+export const createUserSchema = {
+  summary: 'Create a new user',
+  tags: ['users'],
+  body: userSchema.omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  }),
+  response: {
+    201: z.object({
+      status: z.string().default('success'),
+      data: userSchema.omit({ password: true }).extend({
+        account: accountSchema
+          .omit({ userId: true, createdAt: true, initialBalance: true })
+          .extend({ balance: z.number().int() }),
+      }),
+    }),
+    400: z.object({
+      status: z.string().default('fail'),
+      data: z.object({
+        message: z.string(),
+        errors: clientErrorSchema,
+      }),
+      code: z.number().default(400),
+    }),
+  },
+};
 
 export const getUserParamsSchema = z.object({
   userId: z.string().trim(),
@@ -48,5 +71,5 @@ export const createUserAccountSchema = accountSchema.omit({
   createdAt: true,
 });
 
-export type createUserDataType = z.infer<typeof createUserSchema>;
+export type createUserDataType = z.infer<typeof createUserSchema.body>;
 export type createUserAccountDataType = z.infer<typeof createUserAccountSchema>;

@@ -5,9 +5,14 @@ import {
   getUserAccountsController,
   getUserController,
 } from '../controllers/user.controller';
+import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { createUserSchema } from '../schemas/user.schema';
 
 const userRoute: FastifyPluginAsync = async (server: FastifyInstance) => {
-  server.post('/', createUserController);
+  server.withTypeProvider<ZodTypeProvider>().post('/', {
+    schema: createUserSchema,
+    handler: createUserController,
+  });
   server.get('/:userId', getUserController);
   server.post('/:userId/accounts', createUserAccountController);
   server.get('/:userId/accounts', getUserAccountsController);
