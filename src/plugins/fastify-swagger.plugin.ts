@@ -25,6 +25,11 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
           description:
             'Endpoints for creating, retrieving, and managing user profiles and their associated accounts.',
         },
+        {
+          name: 'accounts',
+          description:
+            'Endpoints for managing user accounts, including creation, retrieval, and balance tracking.',
+        },
       ],
     },
     transform: jsonSchemaTransform,
