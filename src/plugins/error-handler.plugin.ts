@@ -1,25 +1,43 @@
-import { FastifyInstance } from 'fastify';
+import {FastifyInstance, FastifyReply} from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import { ZodError } from 'zod';
+import {
+  hasZodFastifySchemaValidationErrors, isResponseSerializationError
+} from 'fastify-type-provider-zod';
 import { ResponseStatus } from '../constants/response-status.type';
 import ClientError from '../utils/client-error.util';
-import formatZodErrors from '../utils/format-zod-errors.util';
 import HttpStatusCodes from '../utils/http-status-codes.util';
+import {formatZodValidationErrors} from "../utils/format-zod-validation-errors.util";
+
+function sendServerError(reply: FastifyReply){
+  return reply.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send({
+    status: ResponseStatus.FAIL,
+    data: {
+      message: 'Internal server error!',
+      code: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    },
+  });
+}
 
 export default fastifyPlugin(async (server: FastifyInstance) => {
-  server.setErrorHandler((err, _, reply) => {
+  server.setErrorHandler((err, req, reply) => {
     // TODO: Implement logging for all errors
 
-    // Validation errors
-    if (err instanceof ZodError) {
-      return reply.status(HttpStatusCodes.BAD_REQUEST).send({
+    if (hasZodFastifySchemaValidationErrors(err)) {
+      const {validation, validationContext} = err;
+
+      return reply.code(HttpStatusCodes.BAD_REQUEST).send({
         status: ResponseStatus.FAIL,
         data: {
-          message: 'Input validation error',
-          errors: formatZodErrors(err),
+          message: `Invalid ${validationContext} input`,
+          errors: formatZodValidationErrors(validation),
           code: HttpStatusCodes.BAD_REQUEST,
         },
       });
+    }
+
+    if(isResponseSerializationError(err)){
+      console.error(`Error Serializing ${err.validationContext} \n: ${err}`);
+      sendServerError(reply)
     }
 
     // Client Errors
@@ -31,13 +49,6 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
     }
 
     console.error(err);
-
-    return reply.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send({
-      status: ResponseStatus.FAIL,
-      data: {
-        message: 'Internal server error!',
-        code: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      },
-    });
+    sendServerError(reply)
   });
 });
