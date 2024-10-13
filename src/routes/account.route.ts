@@ -4,7 +4,10 @@ import {
   getAccountTransactionsController,
 } from '../controllers/account.controller';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { getAccountSchema } from '../schemas/account.schema';
+import {
+  getAccountSchema,
+  getAccountTransactionsSchema,
+} from '../schemas/account.schema';
 
 const accountRoute: FastifyPluginAsync = async (server: FastifyInstance) => {
   // Show
@@ -13,7 +16,11 @@ const accountRoute: FastifyPluginAsync = async (server: FastifyInstance) => {
     handler: getAccountController,
   });
 
-  server.get('/:accountId/transactions', getAccountTransactionsController);
+  // Show Account Transactions
+  server.withTypeProvider<ZodTypeProvider>().get('/:accountId/transactions', {
+    schema: getAccountTransactionsSchema,
+    handler: getAccountTransactionsController,
+  });
 };
 
 export default accountRoute;

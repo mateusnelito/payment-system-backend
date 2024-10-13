@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const transactionSchema = z.object({
+export const transactionSchema = z.object({
   id: z.number().int().positive(),
   fromAccountId: z.string().trim(),
   toAccountId: z.string().trim(),
