@@ -1,14 +1,11 @@
 import HttpStatusCodes from './http-status-codes.util';
-
-interface errors {
-  [key: string]: string[] | Record<string, string[]>;
-}
+import { clientErrorType } from '../schemas/error.schema';
 
 export default class ClientError extends Error {
   public readonly statusCode: number;
-  public readonly errors?: errors;
+  public readonly errors?: clientErrorType;
 
-  constructor(message: string, statusCode?: number, errors?: errors) {
+  constructor(message: string, statusCode?: number, errors?: clientErrorType) {
     super(message);
     this.name = 'ClientError';
     this.errors = errors;
