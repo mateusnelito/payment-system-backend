@@ -107,7 +107,7 @@ export async function getUserAccounts(userId: string) {
 }
 
 export async function accountExists(id: string) {
-  return await prisma.account.findUnique({
+  return prisma.account.findUnique({
     where: { id },
     select: {
       id: true,

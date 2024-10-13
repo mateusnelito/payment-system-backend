@@ -91,7 +91,7 @@ interface createTransactionDataInterface {
 export async function createTransaction(data: createTransactionDataInterface) {
   const { fromAccount, toAccount, amount } = data;
 
-  return await prisma.$transaction(async (transaction) => {
+  return prisma.$transaction(async (transaction) => {
     await transaction.account.update({
       where: { id: fromAccount.id },
       data: { balance: fromAccount.balance - amount },
@@ -130,7 +130,7 @@ export async function getTransaction(id: number) {
 }
 
 export async function getAccountTransactions(accountId: string) {
-  return await prisma.transaction.findMany({
+  return prisma.transaction.findMany({
     where: { OR: [{ fromAccountId: accountId }, { toAccountId: accountId }] },
     orderBy: { createdAt: 'desc' },
   });
