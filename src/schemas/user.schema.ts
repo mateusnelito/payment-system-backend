@@ -79,7 +79,7 @@ export const getUserSchema = {
 
 export const createUserAccountSchema = {
   summary: 'Creates a new account for the specified user.',
-  tags: ['users'],
+  tags: ['users', 'accounts'],
   params: userParamsSchema,
   body: accountSchema.pick({ type: true, initialBalance: true }),
   response: {
@@ -96,6 +96,29 @@ export const createUserAccountSchema = {
         errors: clientErrorSchema,
       }),
       code: z.number().default(400),
+    }),
+    404: z.object({
+      status: z.string().default('fail'),
+      data: z.object({
+        message: z.string(),
+      }),
+      code: z.number().default(404),
+    }),
+  },
+};
+
+export const getUserAccountsSchema = {
+  summary: 'Lists all accounts associated with the specified user.',
+  tags: ['users', 'accounts'],
+  params: userParamsSchema,
+  response: {
+    200: z.object({
+      status: z.string().default('success'),
+      data: z.array(
+        accountSchema
+          .omit({ userId: true, initialBalance: true })
+          .extend({ balance: z.number().int().nonnegative() })
+      ),
     }),
     404: z.object({
       status: z.string().default('fail'),

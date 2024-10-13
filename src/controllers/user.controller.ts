@@ -15,6 +15,7 @@ import HttpStatusCodes from '../utils/http-status-codes.util';
 import {
   checkUserAccountTypeExistence,
   createAccount,
+  getUserAccounts,
 } from '../services/account.service';
 
 export async function createUserController(
@@ -62,17 +63,16 @@ export async function createUserAccountController(
   });
 }
 
-//
-// export async function getUserAccountsController(
-//   request: FastifyRequest,
-//   reply: FastifyReply
-// ) {
-//   const { userId } = getUserParamsSchema.parse(request.params);
-//
-//   await checkUserId(userId);
-//
-//   return reply.send({
-//     status: ResponseStatus.SUCCESS,
-//     data: await getUserAccounts(userId),
-//   });
-// }
+export async function getUserAccountsController(
+  request: FastifyRequest<{ Params: getUserParamsDataType }>,
+  reply: FastifyReply
+) {
+  const { userId } = request.params;
+
+  await checkUserId(userId);
+
+  return reply.send({
+    status: ResponseStatus.SUCCESS,
+    data: await getUserAccounts(userId),
+  });
+}
