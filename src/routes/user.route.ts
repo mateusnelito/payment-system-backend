@@ -1,10 +1,15 @@
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import {
+  createUserAccountController,
   createUserController,
   getUserController,
 } from '../controllers/user.controller';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { createUserSchema, getUserSchema } from '../schemas/user.schema';
+import {
+  createUserAccountSchema,
+  createUserSchema,
+  getUserSchema,
+} from '../schemas/user.schema';
 
 const userRoute: FastifyPluginAsync = async (server: FastifyInstance) => {
   // Store
@@ -18,7 +23,10 @@ const userRoute: FastifyPluginAsync = async (server: FastifyInstance) => {
     schema: getUserSchema,
     handler: getUserController,
   });
-  // server.post('/:userId/accounts', createUserAccountController);
+  server.withTypeProvider<ZodTypeProvider>().post('/:userId/accounts', {
+    schema: createUserAccountSchema,
+    handler: createUserAccountController,
+  });
   // server.get('/:userId/accounts', getUserAccountsController);
 };
 

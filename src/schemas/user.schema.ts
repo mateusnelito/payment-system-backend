@@ -24,6 +24,10 @@ const userSchema = z.object({
   updatedAt: z.date(),
 });
 
+const userParamsSchema = z.object({
+  userId: z.string().trim().nanoid(),
+});
+
 export const createUserSchema = {
   summary: 'Creates a new user with the provided details.',
   tags: ['users'],
@@ -55,9 +59,7 @@ export const createUserSchema = {
 export const getUserSchema = {
   summary: 'Retrieves the details of a user by their unique ID.',
   tags: ['users'],
-  params: z.object({
-    userId: z.string().trim().nanoid(),
-  }),
+  params: userParamsSchema,
   response: {
     200: z.object({
       status: z.string().default('success'),
@@ -75,12 +77,38 @@ export const getUserSchema = {
   },
 };
 
-export const createUserAccountSchema = accountSchema.omit({
-  id: true,
-  userId: true,
-  createdAt: true,
-});
+export const createUserAccountSchema = {
+  summary: 'Creates a new account for the specified user.',
+  tags: ['users'],
+  params: userParamsSchema,
+  body: accountSchema.pick({ type: true, initialBalance: true }),
+  response: {
+    201: z.object({
+      status: z.string().default('success'),
+      data: accountSchema
+        .omit({ userId: true, initialBalance: true })
+        .extend({ balance: z.number().int().nonnegative() }),
+    }),
+    400: z.object({
+      status: z.string().default('fail'),
+      data: z.object({
+        message: z.string(),
+        errors: clientErrorSchema,
+      }),
+      code: z.number().default(400),
+    }),
+    404: z.object({
+      status: z.string().default('fail'),
+      data: z.object({
+        message: z.string(),
+      }),
+      code: z.number().default(404),
+    }),
+  },
+};
 
 export type createUserDataType = z.infer<typeof createUserSchema.body>;
 export type getUserParamsDataType = z.infer<typeof getUserSchema.params>;
-export type createUserAccountDataType = z.infer<typeof createUserAccountSchema>;
+export type createUserAccountDataType = z.infer<
+  typeof createUserAccountSchema.body
+>;
