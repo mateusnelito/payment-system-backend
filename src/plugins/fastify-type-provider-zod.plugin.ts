@@ -8,4 +8,4 @@ import {
 export default fastifyPlugin(async (server: FastifyInstance) => {
   server.setValidatorCompiler(validatorCompiler);
   server.setSerializerCompiler(serializerCompiler);
-})
+});

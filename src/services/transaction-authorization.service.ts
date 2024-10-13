@@ -1,4 +1,5 @@
 import HttpStatusCodes from '../utils/http-status-codes.util';
+
 const AUTHORIZATION_URL = 'https://util.devi.tools/api/v2/authorize';
 
 interface authorizationResponseData {

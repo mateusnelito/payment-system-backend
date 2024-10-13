@@ -1,14 +1,15 @@
-import {FastifyInstance, FastifyReply} from 'fastify';
+import { FastifyInstance, FastifyReply } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import {
-  hasZodFastifySchemaValidationErrors, isResponseSerializationError
+  hasZodFastifySchemaValidationErrors,
+  isResponseSerializationError,
 } from 'fastify-type-provider-zod';
 import { ResponseStatus } from '../constants/response-status.type';
 import ClientError from '../utils/client-error.util';
 import HttpStatusCodes from '../utils/http-status-codes.util';
-import {formatZodValidationErrors} from "../utils/format-zod-validation-errors.util";
+import { formatZodValidationErrors } from '../utils/format-zod-validation-errors.util';
 
-function sendServerError(reply: FastifyReply){
+function sendServerError(reply: FastifyReply) {
   return reply.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send({
     status: ResponseStatus.FAIL,
     data: {
@@ -23,7 +24,7 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
     // TODO: Implement logging for all errors
 
     if (hasZodFastifySchemaValidationErrors(err)) {
-      const {validation, validationContext} = err;
+      const { validation, validationContext } = err;
 
       return reply.code(HttpStatusCodes.BAD_REQUEST).send({
         status: ResponseStatus.FAIL,
@@ -35,9 +36,9 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
       });
     }
 
-    if(isResponseSerializationError(err)){
+    if (isResponseSerializationError(err)) {
       console.error(`Error Serializing ${err.validationContext} \n: ${err}`);
-      sendServerError(reply)
+      sendServerError(reply);
     }
 
     // Client Errors
@@ -49,6 +50,6 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
     }
 
     console.error(err);
-    sendServerError(reply)
+    sendServerError(reply);
   });
 });
