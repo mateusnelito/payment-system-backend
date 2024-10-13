@@ -2,11 +2,13 @@ import fastify from 'fastify';
 import corsPlugin from './plugins/cors.plugin';
 import errorHandlerPlugin from './plugins/error-handler.plugin';
 import routes from './routes/index.route';
+import fastifyTypeProviderZodPlugin from "./plugins/fastify-type-provider-zod.plugin";
 
 const server = fastify();
 
 // Register plugins
 server.register(corsPlugin);
+server.register(fastifyTypeProviderZodPlugin);
 server.register(errorHandlerPlugin);
 
 // Register routes
