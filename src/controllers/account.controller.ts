@@ -1,14 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ResponseStatus } from '../constants/response-status.type';
-import { accountParamsSchema } from '../schemas/account.schema';
+import { getAccountParamsDataType } from '../schemas/account.schema';
 import { checkAccountId, getAccount } from '../services/account.service';
 import { getAccountTransactions } from '../services/transaction.service';
 
 export async function getAccountController(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Params: getAccountParamsDataType }>,
   reply: FastifyReply
 ) {
-  const { accountId } = accountParamsSchema.parse(request.params);
+  const { accountId } = request.params;
 
   return reply.send({
     status: ResponseStatus.SUCCESS,
@@ -17,10 +17,10 @@ export async function getAccountController(
 }
 
 export async function getAccountTransactionsController(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Params: getAccountParamsDataType }>,
   reply: FastifyReply
 ) {
-  const { accountId } = accountParamsSchema.parse(request.params);
+  const { accountId } = request.params;
 
   await checkAccountId(accountId);
 

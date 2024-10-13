@@ -10,6 +10,33 @@ export const accountSchema = z.object({
   createdAt: z.date(),
 });
 
-export const accountParamsSchema = z.object({
-  accountId: z.string().trim(),
+const accountParamsSchema = z.object({
+  accountId: z.string().trim().nanoid(),
 });
+
+export const getAccountSchema = {
+  summary: 'Retrieves details of the specified account, including balance.',
+  tags: ['accounts'],
+  params: accountParamsSchema,
+  response: {
+    200: z.object({
+      status: z.string().default('success'),
+      data: accountSchema.omit({ userId: true, initialBalance: true }).extend({
+        balance: z.number().int().nonnegative(),
+        owner: z.object({
+          id: z.string().nanoid(),
+          fullName: z.string(),
+        }),
+      }),
+    }),
+    404: z.object({
+      status: z.string().default('fail'),
+      data: z.object({
+        message: z.string(),
+      }),
+      code: z.number().default(404),
+    }),
+  },
+};
+
+export type getAccountParamsDataType = z.infer<typeof getAccountSchema.params>;
