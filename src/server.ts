@@ -3,6 +3,7 @@ import corsPlugin from './plugins/cors.plugin';
 import errorHandlerPlugin from './plugins/error-handler.plugin';
 import routes from './routes/index.route';
 import fastifyTypeProviderZodPlugin from './plugins/fastify-type-provider-zod.plugin';
+import fastifySwaggerPlugin from './plugins/fastify-swagger.plugin';
 
 const server = fastify();
 
@@ -10,6 +11,7 @@ const server = fastify();
 server.register(corsPlugin);
 server.register(fastifyTypeProviderZodPlugin);
 server.register(errorHandlerPlugin);
+server.register(fastifySwaggerPlugin);
 
 // Register routes
 server.register(routes);
