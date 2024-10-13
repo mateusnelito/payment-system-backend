@@ -14,9 +14,9 @@ const routes: FastifyPluginAsync = async (server: FastifyInstance) => {
   });
 
   // API Routes
-  server.register(userRoute, { prefix: '/api/users' });
-  server.register(accountRoute, { prefix: '/api/accounts' });
-  server.register(transactionRoute, { prefix: '/api/transactions' });
+  server.register(userRoute, { prefix: '/users' });
+  server.register(accountRoute, { prefix: '/accounts' });
+  server.register(transactionRoute, { prefix: '/transactions' });
 };
 
 export default routes;
