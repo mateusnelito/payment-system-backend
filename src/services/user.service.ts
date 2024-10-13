@@ -58,7 +58,6 @@ export async function createUser(data: createUserDataType) {
         select: {
           id: true,
           balance: true,
-          createdAt: true,
           AccountType: {
             select: {
               name: true,
