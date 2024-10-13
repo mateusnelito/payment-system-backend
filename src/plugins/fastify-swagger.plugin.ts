@@ -7,14 +7,25 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 export default fastifyPlugin(async (server: FastifyInstance) => {
   server.register(fastifySwagger, {
     swagger: {
-      consumes: ['application/json'],
-      produces: ['application/json'],
       info: {
-        title: 'Payment-system API',
-        description: 'lorem ipsum ...',
+        title: 'Payment System API',
+        description:
+          'A simple server API for managing user accounts, processing transactions, and tracking balances.',
         version: '1.0.0',
       },
-      tags: [{ name: 'users' }],
+
+      // TODO: make the host dynamic
+      host: 'localhost:3000',
+      schemes: ['http'],
+      consumes: ['application/json'],
+      produces: ['application/json'],
+      tags: [
+        {
+          name: 'users',
+          description:
+            'Endpoints for creating, retrieving, and managing user profiles and their associated accounts.',
+        },
+      ],
     },
     transform: jsonSchemaTransform,
   });
