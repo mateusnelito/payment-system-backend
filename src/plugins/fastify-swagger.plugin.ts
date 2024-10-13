@@ -10,12 +10,11 @@ export default fastifyPlugin(async (server: FastifyInstance) => {
       consumes: ['application/json'],
       produces: ['application/json'],
       info: {
-        title: 'payment-system',
-        // TODO: Improve this
-        description: 'lorem ipsum',
+        title: 'Payment-system API',
+        description: 'lorem ipsum ...',
         version: '1.0.0',
       },
-      tags: [],
+      tags: [{ name: 'users' }],
     },
     transform: jsonSchemaTransform,
   });
