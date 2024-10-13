@@ -3,12 +3,26 @@ import {
   createTransactionController,
   getTransactionController,
 } from '../controllers/transaction.controller';
+import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import {
+  createTransactionSchema,
+  getTransactionSchema,
+} from '../schemas/transaction.schema';
 
 const transactionRoute: FastifyPluginAsync = async (
   server: FastifyInstance
 ) => {
-  server.post('/', createTransactionController);
-  server.get('/:transactionId', getTransactionController);
+  // Store
+  server.withTypeProvider<ZodTypeProvider>().post('/', {
+    schema: createTransactionSchema,
+    handler: createTransactionController,
+  });
+
+  // Show
+  server.withTypeProvider<ZodTypeProvider>().get('/:transactionId', {
+    schema: getTransactionSchema,
+    handler: getTransactionController,
+  });
 };
 
 export default transactionRoute;
