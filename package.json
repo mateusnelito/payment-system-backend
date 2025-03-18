@@ -36,5 +36,14 @@
     "fastify-type-provider-zod": "^4.0.2",
     "nanoid": "^5.0.7",
     "zod": "^3.23.8"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "bcrypt",
+      "esbuild",
+      "prisma"
+    ]
   }
 }
